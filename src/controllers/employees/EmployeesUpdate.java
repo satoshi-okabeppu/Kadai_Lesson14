@@ -18,16 +18,16 @@ import utils.DBUtil;
 import utils.EncryptUtil;
 
 /**
- * Servlet implementation class EmployeeUpdateServlet
+ * Servlet implementation class EmployeesUpdate
  */
 @WebServlet("/employees/update")
-public class EmployeeUpdateServlet extends HttpServlet {
+public class EmployeesUpdate extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EmployeeUpdateServlet() {
+    public EmployeesUpdate() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -42,7 +42,8 @@ public class EmployeeUpdateServlet extends HttpServlet {
 
             Employee e = em.find(Employee.class, (Integer)(request.getSession().getAttribute("employee_id")));
 
-
+            // 現在の値と異なる社員番号が入力されていたら
+            // 重複チェックを行う指定をする
             Boolean code_duplicate_check = true;
             if(e.getCode().equals(request.getParameter("code"))) {
                 code_duplicate_check = false;
@@ -50,7 +51,8 @@ public class EmployeeUpdateServlet extends HttpServlet {
                 e.setCode(request.getParameter("code"));
             }
 
-
+            // パスワード欄に入力があったら
+            // パスワードの入力値チェックを行う指定をする
             Boolean password_check_flag = true;
             String password = request.getParameter("password");
             if(password == null || password.equals("")) {
@@ -77,7 +79,7 @@ public class EmployeeUpdateServlet extends HttpServlet {
                 request.setAttribute("employee", e);
                 request.setAttribute("errors", errors);
 
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/employees/edit.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/employees/edit.jsp");
                 rd.forward(request, response);
             } else {
                 em.getTransaction().begin();
